@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "production": "pwa-devops-learning"
+  },
+  "targets": {
+    "pwa-devops-learning": {
+      "hosting": {
+        "development": [
+          "pwa-devops-development"
+        ],
+        "learning": [
+          "pwa-devops-learning"
+        ]
+      }
+    }
+  }
+}
