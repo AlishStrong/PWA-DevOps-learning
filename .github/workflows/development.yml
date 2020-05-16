@@ -1,4 +1,4 @@
-name: Build Ionic Angular project and Deploy to Google Firebase
+name: Build, Test and Deploy to development on Firebase
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
       - name: Test
         run: npm run test
   deploy:
