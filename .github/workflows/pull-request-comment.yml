@@ -1,11 +1,11 @@
 name: Test changes in Pull Request and comment
 
-# on:
-#   pull_request:
-#     types: [opened, reopened, edited]
-
 on:
-  push:
+  pull_request:
+    types: [opened, reopened, edited]
+
+# on:
+#   push:
     
 jobs:
   test:
@@ -58,3 +58,13 @@ jobs:
       - name: Show content of test.log
         if:  ${{needs.test.outputs.tests-result == 'Failure'}}
         run: cat test.log
+
+      - name: comment on Pull Request
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/issues/:issue_number/comments
+          repository: ${{ github.repository }}
+          issue_number: ${{ github.event.number }}
+          body: A test comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
