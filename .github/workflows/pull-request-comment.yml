@@ -11,13 +11,19 @@ jobs:
       - name: Check PR started
         run: echo "Started Pull Request"
 
+      - name: Create a test.txt file
+        run: echo 'Hello, world!' > test.txt
+
+      - name: Print content of test.txt
+        run: cat test.txt  
+
       - name: comment on Pull Request
         uses: octokit/request-action@v2.x
         with:
           route: POST /repos/:repository/issues/:issue_number/comments
           repository: ${{ github.repository }}
           issue_number: ${{ github.event.number }}
-          body: A test comment
+          body: test.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
