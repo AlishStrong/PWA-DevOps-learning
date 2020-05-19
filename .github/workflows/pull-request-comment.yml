@@ -11,3 +11,15 @@ jobs:
       - name: Check PR started
         run: echo "Started Pull Request"
 
+      - name: comment on Pull Request
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/issues/:issue_number/comments
+          repository: ${{ github.repository }}
+          issue_number: ${{ github.event.number }}
+          body: A test comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Check PR started
+        run: echo "My comment should be on PR page"    
