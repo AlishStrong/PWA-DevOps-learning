@@ -11,6 +11,8 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    outputs:
+      tests-result: ${{ steps.set_output.outputs.tests-result }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
@@ -43,6 +45,9 @@ jobs:
         with:
           name: testlog
           path: test.log
+      - name: Set output for the job
+        id: set_output
+        run: echo "::set-output name=tests-result::${{steps.test.outcome}}"    
   comment:
     name: Comment test results
     runs-on: ubuntu-latest
@@ -74,3 +79,11 @@ jobs:
       - name: Show content of test.log
         if:  ${{steps.set_output.outputs.TESTS_RESULT == 'failure'}}
         run: cat test.log
+  testOutput:
+    name: Test use of needs.job.outputs.name pattern
+    runs-on: ubuntu-latest
+    needs: test 
+    steps:
+      - name: Print the output of job named "test"
+        run: echo "needs.test.outputs.tests-result = ${{ needs.test.outputs.tests-result }}"   
+
