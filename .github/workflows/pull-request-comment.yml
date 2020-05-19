@@ -2,69 +2,12 @@ name: Test changes in Pull Request and comment
 
 on:
   pull_request:
-    types: [opened, reopened, edited]
-
-# on:
-#   push:
     
 jobs:
   test:
-    name: Test
+    name: Test on pull request
     runs-on: ubuntu-latest
-    outputs:
-      tests-result: ${{ steps.set_output.outputs.tests-result }}
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
+      - name: Check PR started
+        run: echo "Started Pull Request"
 
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Test
-        id: test
-        run: npm run test-log
-        continue-on-error: true
-
-      - name: Set output for tests-result
-        id: set_output
-        run: echo "::set-output name=tests-result::${{steps.test.outcome}}"  
-
-      - name: Upload test.log file
-        uses: actions/upload-artifact@master
-        if: ${{steps.test.outcome == 'Failure'}} # Upload only if tests failed  
-        with:
-          name: testlog
-          path: test.log
-
-  comment:
-    name: Comment test results
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Notify that all tests passed
-        run: echo 'ALL TESTS PASSED!'   
-        if:  ${{needs.test.outputs.tests-result == 'Success'}}
-
-      - name: Notify that tests did not pass
-        run: echo 'TESTS DID NOT PASS'  
-        if:  ${{needs.test.outputs.tests-result == 'Failure'}}    
-
-      - name: Download log file
-        uses: actions/download-artifact@master
-        if:  ${{needs.test.outputs.tests-result == 'Failure'}}
-        with:
-          name: testlog  
-
-      - name: Show content of test.log
-        if:  ${{needs.test.outputs.tests-result == 'Failure'}}
-        run: cat test.log
-
-      - name: comment on Pull Request
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/:repository/issues/:issue_number/comments
-          repository: ${{ github.repository }}
-          issue_number: ${{ github.event.number }}
-          body: A test comment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
