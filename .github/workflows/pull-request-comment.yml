@@ -5,38 +5,66 @@ on:
     
 jobs:
   test:
-    name: Test on pull request
+    name: Test
     runs-on: ubuntu-latest
-    env:
-      TEST_RESULT: 'success'
+    outputs:
+      tests-result: ${{ steps.set_output.outputs.tests-result }}
     steps:
-      - name: Check PR started
-        run: echo "Started Pull Request"
+      - name: Checkout Repo
+        uses: actions/checkout@master
 
-      - name: Create a test.txt file
-        run: echo 'Hello, world!' > test.txt
+      - name: Install Dependencies
+        run: npm ci
 
-      - name: Print content of test.txt 1
-        run: |
-          value=`cat test.txt`
-          echo $value  
-          echo "::set-env name=TEST_RESULT::$value"
+      - name: Test
+        id: test
+        run: npm run test-log
+        continue-on-error: true
 
-      - name: Print content of test.txt 2
-        run:  echo 'TEST_RESULT is' $TEST_RESULT
+      - name: Set output for tests-result
+        id: set_output
+        run: echo "::set-output name=tests-result::${{steps.test.outcome}}"  
 
-      - name: Print content of test.txt 3
-        run:  echo 'TEST_RESULT is' ${{ env.TEST_RESULT }}
+      - name: Upload test.log file
+        uses: actions/upload-artifact@master
+        if: ${{steps.test.outcome == 'Failure'}} # Upload only if tests failed  
+        with:
+          name: testlog
+          path: test.log
 
-      - name: comment on Pull Request
+  comment:
+    name: Comment test results
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Comment that all tests PASSED
+        if:  ${{needs.test.outputs.tests-result == 'Success'}}
         uses: octokit/request-action@v2.x
         with:
           route: POST /repos/:repository/issues/:issue_number/comments
           repository: ${{ github.repository }}
           issue_number: ${{ github.event.number }}
-          body: ${{ env.TEST_RESULT }}
+          body: All tests PASSED!
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Check PR started
-        run: echo "My comment should be on PR page"    
+
+      - name: Comment that tests FAILED 
+        if:  ${{needs.test.outputs.tests-result == 'Failure'}}
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/issues/:issue_number/comments
+          repository: ${{ github.repository }}
+          issue_number: ${{ github.event.number }}
+          body: Tests FAILED!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+
+      - name: Download log file
+        uses: actions/download-artifact@master
+        if:  ${{needs.test.outputs.tests-result == 'Failure'}}
+        with:
+          name: testlog  
+
+      - name: Show content of test.log
+        if:  ${{needs.test.outputs.tests-result == 'Failure'}}
+        run: cat test.log

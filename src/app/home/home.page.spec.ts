@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule, IonCardTitle } from '@ionic/angular';
-
-import { HomePage } from './home.page';
 import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { IonCardTitle, IonicModule } from '@ionic/angular';
+import { HomePage } from './home.page';
+
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -12,7 +12,7 @@ describe('HomePage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomePage ],
+      declarations: [HomePage],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
@@ -29,6 +29,6 @@ describe('HomePage', () => {
   it('should be MASTER title', () => {
     expect(
       debugElement.query(By.directive(IonCardTitle)).nativeElement.textContent
-      ).toContain('MASTER TO FAIL')
+    ).toContain('MASTER TO FAIL')
   });
 });
