@@ -23,7 +23,7 @@ jobs:
           route: POST /repos/:repository/issues/:issue_number/comments
           repository: ${{ github.repository }}
           issue_number: ${{ github.event.number }}
-          body: test.txt
+          body: ${test.txt}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
