@@ -7,6 +7,8 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    outputs:
+      tests-result: ${{ steps.set_output.outputs.tests-result }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
@@ -19,19 +21,9 @@ jobs:
         run: npm run test-log
         continue-on-error: true
 
-      - name: Create tests_result file with 'success'
-        run: echo 'success' > testsresult.txt
-        if: ${{steps.test.outcome == 'Success'}} 
-
-      - name: Create tests_result file with 'failure'
-        run: echo 'failure' > testsresult.txt
-        if: ${{steps.test.outcome == 'Failure'}} 
-
-      - name: Upload tests_result file
-        uses: actions/upload-artifact@master  
-        with:
-          name: testsresult
-          path: testsresult.txt
+      - name: Set output for tests-result
+        id: set_output
+        run: echo "::set-output name=tests-result::${{steps.test.outcome}}"  
 
       - name: Upload test.log file
         uses: actions/upload-artifact@master
@@ -39,34 +31,26 @@ jobs:
         with:
           name: testlog
           path: test.log
+
   comment:
     name: Comment test results
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Download testsresult file
-        uses: actions/download-artifact@master
-        with:
-          name: testsresult
-          
-      - name: Read testsresult.txt file and set output parameter
-        id: set_output
-        run: echo "::set-output name=TESTS_RESULT::$(<testsresult.txt)" 
-
       - name: Notify that all tests passed
         run: echo 'ALL TESTS PASSED!'   
-        if:  ${{steps.set_output.outputs.TESTS_RESULT == 'success'}}
+        if:  ${{needs.test.outputs.tests-result == 'Success'}}
 
       - name: Notify that tests did not pass
         run: echo 'TESTS DID NOT PASS'  
-        if:  ${{steps.set_output.outputs.TESTS_RESULT == 'failure'}}    
+        if:  ${{needs.test.outputs.tests-result == 'Failure'}}    
 
       - name: Download log file
         uses: actions/download-artifact@master
-        if:  ${{steps.set_output.outputs.TESTS_RESULT == 'failure'}}
+        if:  ${{needs.test.outputs.tests-result == 'Failure'}}
         with:
           name: testlog  
 
       - name: Show content of test.log
-        if:  ${{steps.set_output.outputs.TESTS_RESULT == 'failure'}}
+        if:  ${{needs.test.outputs.tests-result == 'Failure'}}
         run: cat test.log
