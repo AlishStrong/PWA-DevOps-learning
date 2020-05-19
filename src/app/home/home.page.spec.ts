@@ -26,9 +26,9 @@ describe('HomePage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be MASTER title', () => {
+  it('should be DEVELOPMENT title', () => {
     expect(
       debugElement.query(By.directive(IonCardTitle)).nativeElement.textContent
-    ).toContain('MASTER')
+    ).toContain('DEVELOPMENT')
   });
 });
