@@ -29,6 +29,6 @@ describe('HomePage', () => {
   it('should be MASTER title', () => {
     expect(
       debugElement.query(By.directive(IonCardTitle)).nativeElement.textContent
-    ).toContain('MASTER TO FAIL')
+    ).toContain('MASTER')
   });
 });
