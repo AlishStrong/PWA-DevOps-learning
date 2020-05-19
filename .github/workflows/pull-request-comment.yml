@@ -7,6 +7,8 @@ jobs:
   test:
     name: Test on pull request
     runs-on: ubuntu-latest
+    env:
+      TEST_RESULT: 'success'
     steps:
       - name: Check PR started
         run: echo "Started Pull Request"
@@ -14,8 +16,17 @@ jobs:
       - name: Create a test.txt file
         run: echo 'Hello, world!' > test.txt
 
-      - name: Print content of test.txt
-        run: cat test.txt  
+      - name: Print content of test.txt 1
+        run: |
+          value=`cat test.txt`
+          echo $value  
+          echo "::set-env name=TEST_RESULT::$value"
+
+      - name: Print content of test.txt 2
+        run:  echo 'TEST_RESULT is' $TEST_RESULT
+
+      - name: Print content of test.txt 3
+        run:  echo 'TEST_RESULT is' ${{ env.TEST_RESULT }}
 
       - name: comment on Pull Request
         uses: octokit/request-action@v2.x
@@ -23,7 +34,7 @@ jobs:
           route: POST /repos/:repository/issues/:issue_number/comments
           repository: ${{ github.repository }}
           issue_number: ${{ github.event.number }}
-          body: ${test.txt}
+          body: ${{ env.TEST_RESULT }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
