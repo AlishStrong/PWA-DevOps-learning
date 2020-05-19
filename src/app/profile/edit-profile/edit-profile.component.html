@@ -1,0 +1,43 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Edit user profile</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="warning"
+                  fill="solid"
+                  (click)="cancelUpdate()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <form (ngSubmit)="updateProfile()"
+        [formGroup]="profileForm">
+    <ion-item>
+      <ion-label>Firsname</ion-label>
+      <ion-input type="text"
+                 formControlName="firstname"
+                 name="firstname"
+                 placeholder="First Name..."></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Lastname</ion-label>
+      <ion-input type="text"
+                 formControlName="lastname"
+                 name="lastname"></ion-input>
+    </ion-item>
+    <ion-grid>
+      <ion-row class="ion-justify-content-around">
+        <ion-col size="3">
+          <ion-button color="success"
+                      fill="solid"
+                      type="submit"
+                      [disabled]="profileForm.invalid">Update profile</ion-button>
+        </ion-col>
+        <ion-col size="3">
+          <ion-button color="warning"
+                      fill="solid"
+                      (click)="cancelUpdate()">Cancel</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

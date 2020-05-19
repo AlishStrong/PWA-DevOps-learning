@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>My profile page</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-avatar>
+    <img src="/assets/img/profile.jpg">
+  </ion-avatar>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{ userProfile.firstName }}, {{ userProfile.dateOfBirth | age }}
+      </ion-card-title>
+      <ion-card-subtitle>
+        From {{ userProfile.city }}, {{ userProfile.country }}
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      {{ userProfile.bio }}
+    </ion-card-content>
+    <ion-item lines="none">
+      <ion-label position="floating">Interests:</ion-label>
+      <ion-input readonly
+                 value="{{userProfile.interests.join(', ')}}"></ion-input>
+    </ion-item>
+    <ion-item class="retry"
+              button
+              (click)="editProfile()"
+              detail="false"
+              lines="none"
+              color="success">
+      <ion-icon name="cog-outline"></ion-icon>
+      <ion-label class="ion-text-center">
+        Edit profile
+      </ion-label>
+    </ion-item>
+  </ion-card>
+</ion-content>
