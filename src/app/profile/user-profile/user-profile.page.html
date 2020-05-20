@@ -11,7 +11,7 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>
-        {{ userProfile.firstName }}, {{ userAge }}
+        {{ userProfile.firstName }}, {{ userProfile.dateOfBirth | age }}
       </ion-card-title>
       <ion-card-subtitle>
         From {{ userProfile.city }}, {{ userProfile.country }}
