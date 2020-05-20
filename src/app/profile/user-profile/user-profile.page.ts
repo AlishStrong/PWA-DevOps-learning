@@ -1,19 +1,6 @@
+import { ProfileService } from './../services/profile.service';
 import { UserProfile } from '../../../models/interfaces/user-profile.interface';
 import { Component, OnInit } from '@angular/core';
-
-const alisher: UserProfile = {
-  bio: `
-  Friendly, outgoing and cheerful!
-  Best thing ever existed after the sliced bread
-  `,
-  city: 'Espoo',
-  country: 'Finland',
-  dateOfBirth: new Date(1995, 2, 23),
-  firstName: 'Alisher',
-  lastName: 'Aliev',
-  interests: ['Gym', 'Food', 'Parties'],
-  userId: 1
-}
 
 @Component({
   selector: 'app-userprofile',
@@ -24,10 +11,10 @@ export class UserProfilePage implements OnInit {
   userProfile: UserProfile;
   userAge: number;
 
-  constructor() { }
+  constructor(private profileService: ProfileService) { }
 
   ngOnInit() {
-    this.userProfile = alisher;
+    this.userProfile = this.profileService.getUserProfile();
     this.userAge = this.getAge(this.userProfile.dateOfBirth);
   }
 
