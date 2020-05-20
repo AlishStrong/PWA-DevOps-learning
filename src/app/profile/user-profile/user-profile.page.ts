@@ -16,11 +16,11 @@ const alisher: UserProfile = {
 }
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss'],
+  selector: 'app-userprofile',
+  templateUrl: './user-profile.page.html',
+  styleUrls: ['./user-profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class UserProfilePage implements OnInit {
   userProfile: UserProfile;
   userAge: number;
 
