@@ -12,4 +12,7 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
   }
 
+  editProfile() {
+    console.log("edit profile");
+  }
 }

@@ -1,14 +1,41 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>profile</ion-title>
+    <ion-title>My profile page</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <img src="/assets/img/profile.jpg">
-  <ion-list>
-    <ion-list-header>
-      <h1>Alisher</h1>
-    </ion-list-header>
-  </ion-list>
+  <ion-avatar>
+    <img src="/assets/img/profile.jpg">
+  </ion-avatar>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        Alisher, 25
+      </ion-card-title>
+      <ion-card-subtitle>
+        From Espoo, Finland
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      Friendly, outgoing and cheerful!
+      Best thing existed after the sliced bread
+    </ion-card-content>
+    <ion-item lines="none">
+      <ion-label position="floating">Interests:</ion-label>
+      <ion-input readonly
+                 value="Gym, Food, Movies"></ion-input>
+    </ion-item>
+    <ion-item class="retry"
+              button
+              (click)="editProfile()"
+              detail="false"
+              lines="none"
+              color="success">
+      <ion-icon name="cog-outline"></ion-icon>
+      <ion-label class="ion-text-center">
+        Edit profile
+      </ion-label>
+    </ion-item>
+  </ion-card>
 </ion-content>
