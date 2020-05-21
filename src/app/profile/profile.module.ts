@@ -1,3 +1,4 @@
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +17,6 @@ import { AgePipe } from './pipes/age.pipe';
     IonicModule,
     ProfilePageRoutingModule
   ],
-  declarations: [UserProfilePage, AgePipe]
+  declarations: [UserProfilePage, AgePipe, EditProfileComponent]
 })
 export class ProfilePageModule {}
