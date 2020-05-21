@@ -23,7 +23,6 @@ export class UserProfilePage implements OnInit {
     console.log('edit profile');
     console.log('Open modal');
     this.modalElement = await this.modalController.create({
-      cssClass: 'my-custom-modal-css',
       component: EditProfileComponent,
       componentProps: {
         modalController: this.modalController
