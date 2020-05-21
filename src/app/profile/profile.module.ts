@@ -1,7 +1,7 @@
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -15,6 +15,7 @@ import { AgePipe } from './pipes/age.pipe';
     CommonModule,
     FormsModule,
     IonicModule,
+    ReactiveFormsModule,
     ProfilePageRoutingModule
   ],
   declarations: [UserProfilePage, AgePipe, EditProfileComponent]

@@ -2,29 +2,29 @@
   <ion-toolbar>
     <ion-title>Edit user profile</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismissModal()">Close</ion-button>
+      <ion-button color="warning" fill="solid" (click)="cancelUpdate()">Cancel</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-  <ion-list>
+  <form (ngSubmit)="updateProfile(profileForm.value)" [formGroup]="profileForm">
     <ion-item>
-      <ion-label>
-        <h2>Gollum</h2>
-        <p>Sneaky little hobbitses!</p>
-      </ion-label>
+      <ion-label>Firsname</ion-label>
+      <ion-input type="text" formControlName="firstname" name="firstname" placeholder="First Name..."></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>
-        <h2>Frodo</h2>
-        <p>Go back, Sam! I'm going to Mordor alone!</p>
-      </ion-label>
+      <ion-label>Lastname</ion-label>
+      <ion-input type="text" formControlName="lastname" name="lastname"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Samwise</h2>
-        <p>What we need is a few good taters.</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+    <ion-grid>
+      <ion-row class="ion-justify-content-around">
+        <ion-col size="3">
+          <ion-button color="success" fill="solid" type="submit" [disabled]="profileForm.invalid">Update profile</ion-button>
+        </ion-col>
+        <ion-col size="3">
+          <ion-button color="warning" fill="solid" (click)="cancelUpdate()">Cancel</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>
