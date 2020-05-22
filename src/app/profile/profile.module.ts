@@ -18,6 +18,10 @@ import { AgePipe } from './pipes/age.pipe';
     ReactiveFormsModule,
     ProfilePageRoutingModule
   ],
-  declarations: [UserProfilePage, AgePipe, EditProfileComponent]
+  declarations: [
+    UserProfilePage,
+    AgePipe,
+    EditProfileComponent
+  ]
 })
-export class ProfilePageModule {}
+export class ProfilePageModule { }

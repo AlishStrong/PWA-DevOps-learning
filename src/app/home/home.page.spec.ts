@@ -25,10 +25,4 @@ describe('HomePage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should be DEVELOPMENT title', () => {
-    expect(
-      debugElement.query(By.directive(IonCardTitle)).nativeElement.textContent
-    ).toContain('DEVELOPMENT')
-  });
 });
