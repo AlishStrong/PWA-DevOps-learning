@@ -6,16 +6,35 @@ const routes: Routes = [
   {
     path: '',
     component: HomePage,
-  },
-  {
-    path: 'grid',
-    loadChildren: () => import('./grid/grid.module').then(m => m.GridPageModule)
-  },
-  {
-    path: 'map',
-    loadChildren: () => import('./map/map.module').then(m => m.MapPageModule)
+    children:
+      [
+        {
+          path: 'grid',
+          children:
+            [
+              {
+                path: '',
+                loadChildren: () => import('./grid/grid.module').then(m => m.GridPageModule)
+              }
+            ]
+        },
+        {
+          path: 'map',
+          children:
+            [
+              {
+                path: '',
+                loadChildren: () => import('./map/map.module').then(m => m.MapPageModule)
+              }
+            ]
+        },
+        {
+          path: '',
+          redirectTo: '/home/grid',
+          pathMatch: 'full'
+        }
+      ]
   }
-
 ];
 
 @NgModule({
