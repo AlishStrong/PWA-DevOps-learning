@@ -1,9 +1,8 @@
 import { EditProfileComponent } from './../edit-profile/edit-profile.component';
-import { UserProfile } from './../../../models/interfaces/user-profile.interface';
+import { UserProfile } from './../../../../models/interfaces/user-profile.interface';
 import { ProfileService } from './../services/profile.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { OverlayEventDetail } from '@ionic/core';
 
 @Component({
   selector: 'app-userprofile',

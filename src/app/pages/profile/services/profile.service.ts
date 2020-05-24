@@ -1,4 +1,4 @@
-import { UserProfile } from '../../../models/interfaces/user-profile.interface';
+import { UserProfile } from '../../../../models/interfaces/user-profile.interface';
 import { Injectable } from '@angular/core';
 
 const alisher: UserProfile = {
