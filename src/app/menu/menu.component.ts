@@ -12,11 +12,15 @@ export class MenuComponent implements OnInit {
   pages = [
     {
       title: 'Home',
-      url: '/home'
+      url: '/home',
+      icon: 'home-outline',
+      icon_active: 'home'
     },
     {
       title: 'Profile',
-      url: '/profile'
+      url: '/profile',
+      icon: 'person-outline',
+      icon_active: 'person'
     }
   ]
 
