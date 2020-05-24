@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
+    loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)
   },
 ];
 

@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
-import { MenuPage } from './menu.page';
-
 const routes: Routes = [
   {
     path: 'home',
@@ -23,4 +21,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule],
 })
-export class MenuPageRoutingModule { }
+export class MenuRoutingModule { }

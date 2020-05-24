@@ -4,10 +4,10 @@ import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu',
-  templateUrl: './menu.page.html',
-  styleUrls: ['./menu.page.scss'],
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.scss'],
 })
-export class MenuPage implements OnInit {
+export class MenuComponent implements OnInit {
   selectedPath = '/home';
   pages = [
     {

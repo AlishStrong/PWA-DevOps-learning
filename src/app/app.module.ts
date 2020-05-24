@@ -1,4 +1,4 @@
-import { MenuPageModule } from './menu/menu.module';
+import { MenuModule } from './menu/menu.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -16,7 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    MenuPageModule],
+    MenuModule],
   providers: [
     StatusBar,
     SplashScreen,
