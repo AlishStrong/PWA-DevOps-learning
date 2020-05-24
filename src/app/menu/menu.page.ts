@@ -21,14 +21,13 @@ export class MenuPage implements OnInit {
   ]
 
   constructor(private router: Router) {
-   this.router.events.pipe(
-     filter((event: RouterEvent) => (event.url && event.url !== undefined && event.url !== '/'))
-   ).subscribe((event: RouterEvent) => {
-     this.selectedPath = event.url;
-   })
+    this.router.events.pipe(
+      filter((event: RouterEvent) => (event.url && event.url !== undefined && event.url !== '/'))
+    ).subscribe((event: RouterEvent) => {
+      this.selectedPath = event.url;
+    })
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }

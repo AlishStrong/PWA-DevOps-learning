@@ -18,4 +18,4 @@ import { MenuPage } from './menu.page';
   declarations: [MenuPage],
   exports: [MenuPage]
 })
-export class MenuPageModule {}
+export class MenuPageModule { }

@@ -1,4 +1,4 @@
-import { EditProfileComponent} from './../edit-profile/edit-profile.component';
+import { EditProfileComponent } from './../edit-profile/edit-profile.component';
 import { UserProfile } from './../../../models/interfaces/user-profile.interface';
 import { ProfileService } from './../services/profile.service';
 import { Component, OnInit, Input } from '@angular/core';
@@ -33,7 +33,7 @@ export class UserProfilePage implements OnInit {
     this.modalElement.present();
     this.modalElement.onDidDismiss().then(output => {
       if (output.data) {
-        this.userProfile = {...output.data};
+        this.userProfile = { ...output.data };
         console.log('Profile updated');
       } else {
         console.log('Edit profile was cancelled');
