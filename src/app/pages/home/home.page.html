@@ -3,25 +3,15 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-buttons slot="secondary">
+      <ion-button>
+        <ion-icon slot="icon-only"
+                  name="star"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Home page</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-tabs>
-
-    <ion-tab-bar slot="bottom" color="primary">
-      <ion-tab-button tab="grid">
-        <ion-icon name="grid-outline"></ion-icon>
-        <ion-label>Grid</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button tab="map">
-        <ion-icon name="globe-outline"></ion-icon>
-        <ion-label>Map</ion-label>
-      </ion-tab-button>
-
-    </ion-tab-bar>
-  
-  </ion-tabs>
 </ion-content>
