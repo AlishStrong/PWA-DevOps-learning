@@ -1,3 +1,4 @@
+<ion-split-pane contentId="main">
   <ion-menu contentId="main">
     <ion-header>
       <ion-toolbar color="primary">
@@ -6,13 +7,13 @@
     </ion-header>
     <ion-content>
       <ion-list>
-        <ion-menu-toggle>
-          <ion-item [routerLink]="['home']" [routerDirection]="'root'">Home</ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle>
-          <ion-item [routerLink]="['profile']" [routerDirection]="'root'">Profile</ion-item>
+        <ion-menu-toggle autoHide="false" *ngFor="let p of pages">
+          <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath === p.url">
+            {{ p.title }}
+          </ion-item>
         </ion-menu-toggle>
       </ion-list>
     </ion-content>
   </ion-menu>
   <ion-router-outlet id="main"></ion-router-outlet>
+</ion-split-pane>
