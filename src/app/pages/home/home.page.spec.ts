@@ -1,9 +1,8 @@
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { IonCardTitle, IonicModule } from '@ionic/angular';
+import { RouterTestingModule } from '@angular/router/testing';
+import { IonicModule } from '@ionic/angular';
 import { HomePage } from './home.page';
-
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -13,7 +12,10 @@ describe('HomePage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [HomePage],
-      imports: [IonicModule.forRoot()]
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);
