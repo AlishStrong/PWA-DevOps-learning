@@ -7,9 +7,13 @@
     </ion-header>
     <ion-content>
       <ion-list>
-        <ion-menu-toggle autoHide="false" *ngFor="let p of pages">
-          <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath === p.url">
-            <ion-icon [name]="selectedPath === p.url ? p.icon_active : p.icon" slot="start"></ion-icon>
+        <ion-menu-toggle autoHide="false"
+                         *ngFor="let p of pages">
+          <ion-item [routerLink]="p.url"
+                    routerDirection="root"
+                    [class.active-item]="selectedPath.includes(p.url)">
+            <ion-icon [name]="selectedPath.includes(p.url) ? p.icon_active : p.icon"
+                      slot="start"></ion-icon>
             <ion-label>
               {{ p.title }}
             </ion-label>
