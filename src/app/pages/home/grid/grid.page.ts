@@ -7,22 +7,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GridPage implements OnInit {
   places: Place[] = [
-    { title: `Alisher's` },
-    { title: `Peppi's` },
-    { title: `Paulina and co.` },
-    { title: `Matisserie` },
-    { title: `Lebanon delights` },
-    { title: `Viihdemaa` },
-    { title: `Movie nation` },
-    { title: `Sea adventures` },
-    { title: `Sailor's bar` },
-    { title: `Seven friends` },
-    { title: `Vegicious` },
-    { title: `Body+` },
-    { title: `Laser polygon` },
-    { title: `Music bar` },
-    { title: `Karaoke, chill and bar` },
-    { title: 'Dupligo' }
+    {
+      title: `Alisher's`,
+      img: 'alishers'
+    },
+    { title: `Peppi's`, img: 'peppis' },
+    { title: `Paulina and co.`, img: 'paulina_and_co' },
+    { title: `Matisserie`, img: 'matisserie' },
+    { title: `Lebanon delights`, img: 'lebanon_delights' },
+    { title: `Viihdemaa`, img: 'viihdemaa' },
+    { title: `Movie nation`, img: 'movie_nation' },
+    { title: `Sea adventures`, img: 'sea_adventures' },
+    { title: `Sailor's bar`, img: 'sailors_bar' },
+    { title: `Seven friends`, img: 'seven_friends' },
+    { title: `Vegicious`, img: 'vegicious' },
+    { title: `Body+`, img: 'body_plus' },
+    { title: `Laser polygon`, img: 'laser_polygon' },
+    { title: `Music bar`, img: 'music_bar' },
+    { title: `Karaoke, chill and bar`, img: 'karaoke_chill_and_bar' },
+    { title: 'Dupligo', img: 'dupligo' }
   ];
 
   constructor() { }
@@ -33,5 +36,6 @@ export class GridPage implements OnInit {
 }
 
 export interface Place {
-  title: string
+  title: string,
+  img: string
 }
