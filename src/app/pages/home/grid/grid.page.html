@@ -5,5 +5,19 @@
 </ion-header>
 
 <ion-content>
-  Here will be places on a grid of cards
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let place of places"
+               size-xs="6"
+               size-md="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              {{place.title}}
+            </ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
