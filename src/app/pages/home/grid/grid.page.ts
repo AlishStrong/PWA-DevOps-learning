@@ -92,10 +92,45 @@ export class GridPage implements OnInit {
   ];
 
   modalElement: HTMLIonModalElement;
+  showTypes = false;
+  types: Set<string>;
 
   constructor(private modalController: ModalController) { }
 
   ngOnInit() {
+    this.types = this.getAllTypes(this.places);
+  }
+
+  getAllTypes(places: Place[]): Set<string> {
+    console.log([...new Set(places.flatMap(p => p.type))]);
+    return new Set(places.flatMap(p => p.type));
+  }
+
+  mapTypeToIcon(type: string): string {
+    switch (type) {
+      case 'active':
+        return 'pulse';
+      case 'eatery':
+        return 'restaurant';
+      case 'bar':
+        return 'beer';
+      case 'sports':
+        return 'trophy';
+      case 'karaoke':
+        return 'mic';
+      case 'water':
+        return 'boat';
+      case 'games':
+        return 'game-controller';
+      case 'night club':
+        return 'wine';
+      case 'movies':
+        return 'videocam';
+      case 'music':
+        return 'musical-notes';
+      default:
+        return '';
+    }
   }
 
   async placeSelected(selectedPlace: Place) {
