@@ -11,7 +11,8 @@
                size-xs="12"
                size-sm="6"
                size-md="4">
-        <ion-card>
+        <ion-card button="true"
+                  (click)="placeSelected(place.title)">
           <img [src]="'/assets/img/places/' + place.img + '.jpg'">
           <ion-card-header>
             <ion-card-title>

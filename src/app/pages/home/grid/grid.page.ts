@@ -33,6 +33,9 @@ export class GridPage implements OnInit {
   ngOnInit() {
   }
 
+  placeSelected(placeId?: string) {
+    console.log('Selected ', placeId);
+  }
 }
 
 export interface Place {
