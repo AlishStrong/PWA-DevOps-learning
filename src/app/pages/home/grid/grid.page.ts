@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { PromotionComponent } from '../promotion/promotion.component';
 
 @Component({
   selector: 'app-grid',
@@ -28,13 +30,27 @@ export class GridPage implements OnInit {
     { title: 'Dupligo', img: 'dupligo' }
   ];
 
-  constructor() { }
+  modalElement: HTMLIonModalElement;
+
+  constructor(private modalController: ModalController) { }
 
   ngOnInit() {
   }
 
-  placeSelected(placeId?: string) {
-    console.log('Selected ', placeId);
+  async placeSelected(selectedPlace: Place) {
+    console.log('Selected ', selectedPlace.title);
+    this.modalElement = await this.modalController.create({
+      component: PromotionComponent,
+      componentProps: {
+        modalController: this.modalController,
+        selectedPlace
+      }
+    })
+
+    this.modalElement.present();
+    this.modalElement.onDidDismiss().then(() => {
+      console.log('Back in Home Grid');
+    });
   }
 }
 
