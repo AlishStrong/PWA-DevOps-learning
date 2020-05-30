@@ -5,15 +5,29 @@
 </ion-header>
 
 <ion-content>
-  <p>
-    <ion-chip outline
-              *ngFor="let type of types">
-      <ion-icon [name]="mapTypeToIcon(type)"></ion-icon>
-      <ion-label>{{type}}</ion-label>
-    </ion-chip>
-  </p>
-
   <ion-list>
+    <p *ngIf="showTypesTop"
+       style="margin-left: 16px; margin-top: 0; margin-bottom: 0;">
+      <ion-chip outline
+                (click)="onTypePress(type)"
+                [color]="isSelectedType(type)"
+                *ngFor="let type of types">
+        <ion-icon [name]="mapTypeToIcon(type)"></ion-icon>
+        <ion-label>{{type}}</ion-label>
+      </ion-chip>
+    </p>
+    <ion-item button
+              (click)="showTypesTop = !showTypesTop"
+              detail="false">
+      <ion-icon name="caret-down"
+                slot="end"
+                *ngIf="showTypesTop"></ion-icon>
+      <ion-icon name="caret-up"
+                slot="end"
+                *ngIf="!showTypesTop"></ion-icon>
+      <ion-label>Choose type (top appearence)</ion-label>
+    </ion-item>
+
     <ion-item button
               (click)="showTypes = !showTypes"
               detail="false">
@@ -23,33 +37,16 @@
       <ion-icon name="caret-up"
                 slot="end"
                 *ngIf="!showTypes"></ion-icon>
-      <ion-label>Choose type</ion-label>
+      <ion-label>Choose type (bottom appearence)</ion-label>
     </ion-item>
     <p style="margin-left: 16px; margin-top: 0;"
        *ngIf="showTypes">
       <ion-chip outline
-                color="primary">
-        <ion-icon name="pin"></ion-icon>
-        <ion-label>Madison</ion-label>
-        <ion-icon name="close-circle"></ion-icon>
-      </ion-chip>
-      <ion-chip outline
-                color="secondary">
-        <ion-icon name="wine"></ion-icon>
-        <ion-label>Nightlife</ion-label>
-        <ion-icon name="close-circle"></ion-icon>
-      </ion-chip>
-      <ion-chip outline
-                color="tertiary">
-        <ion-icon name="restaurant"></ion-icon>
-        <ion-label>Dining</ion-label>
-        <ion-icon name="close-circle"></ion-icon>
-      </ion-chip>
-      <ion-chip outline
-                color="dark">
-        <ion-icon name="videocam"></ion-icon>
-        <ion-label>Entertainment</ion-label>
-        <ion-icon name="close-circle"></ion-icon>
+                (click)="onTypePress(type)"
+                [color]="isSelectedType(type)"
+                *ngFor="let type of types">
+        <ion-icon [name]="mapTypeToIcon(type)"></ion-icon>
+        <ion-label>{{type}}</ion-label>
       </ion-chip>
     </p>
   </ion-list>

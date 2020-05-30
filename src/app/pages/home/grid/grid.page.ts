@@ -93,7 +93,9 @@ export class GridPage implements OnInit {
 
   modalElement: HTMLIonModalElement;
   showTypes = false;
+  showTypesTop = false;
   types: Set<string>;
+  selectedTypes: string[] = [];
 
   constructor(private modalController: ModalController) { }
 
@@ -102,8 +104,27 @@ export class GridPage implements OnInit {
   }
 
   getAllTypes(places: Place[]): Set<string> {
-    console.log([...new Set(places.flatMap(p => p.type))]);
     return new Set(places.flatMap(p => p.type));
+  }
+
+  isSelectedType(type: string): string {
+    if (this.selectedTypes.includes(type)) {
+      return 'primary';
+    }
+    return;
+  }
+
+  onTypePress(type: string) {
+    console.log('Before: ', this.selectedTypes);
+    if (this.selectedTypes.includes(type)) {
+      console.log('Remove type');
+      this.selectedTypes = this.selectedTypes.filter(t => t !== type);
+      console.log('After: ', this.selectedTypes);
+    } else {
+      console.log('Add type');
+      this.selectedTypes.push(type);
+      console.log('After: ', this.selectedTypes);
+    }
   }
 
   mapTypeToIcon(type: string): string {
