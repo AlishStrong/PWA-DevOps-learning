@@ -93,7 +93,6 @@ export class GridPage implements OnInit {
 
   modalElement: HTMLIonModalElement;
   showTypes = false;
-  showTypesTop = false;
   types: Set<string>;
   selectedTypes: string[] = [];
   showedPlaces: Place[] = [];
