@@ -1,0 +1,20 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>{{selectedPlace.title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="warning"
+                  fill="solid"
+                  (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-card>
+    <img [src]="'/assets/img/places/' + selectedPlace.img + '.jpg'">
+    <ion-card-header>
+      <ion-card-title>
+        {{selectedPlace.title}}
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+</ion-content>

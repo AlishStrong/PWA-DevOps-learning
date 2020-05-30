@@ -14,7 +14,7 @@ const routes: Routes = [
             [
               {
                 path: '',
-                loadChildren: () => import('./grid/grid.module').then( m => m.GridPageModule)
+                loadChildren: () => import('./grid/grid.module').then(m => m.GridPageModule)
               }
             ]
         },
@@ -24,7 +24,7 @@ const routes: Routes = [
             [
               {
                 path: '',
-                loadChildren: () => import('./map/map.module').then( m => m.MapPageModule)
+                loadChildren: () => import('./map/map.module').then(m => m.MapPageModule)
               }
             ]
         },
@@ -41,4 +41,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class HomePageRoutingModule {}
+export class HomePageRoutingModule { }
