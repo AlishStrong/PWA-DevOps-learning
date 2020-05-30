@@ -93,6 +93,8 @@ export class GridPage implements OnInit {
 
   modalElement: HTMLIonModalElement;
   showTypes = false;
+  showSort = false;
+  sortOrder = 'ASC';
   types: Set<string>;
   selectedTypes: string[] = [];
   showedPlaces: Place[] = [];
@@ -116,17 +118,17 @@ export class GridPage implements OnInit {
   }
 
   onTypePress(type: string) {
-    console.log('Before: ', this.selectedTypes);
     if (this.selectedTypes.includes(type)) {
-      console.log('Remove type');
       this.selectedTypes = this.selectedTypes.filter(t => t !== type);
-      console.log('After: ', this.selectedTypes);
     } else {
-      console.log('Add type');
       this.selectedTypes.push(type);
-      console.log('After: ', this.selectedTypes);
     }
     this.filterPlaces();
+  }
+
+  sortOrderChanged(event: any): void {
+    this.sortOrder = event.detail.value;
+    this.sortPlaces();
   }
 
   private filterPlaces(): void {
@@ -142,6 +144,33 @@ export class GridPage implements OnInit {
       });
     } else {
       this.showedPlaces = this.places;
+    }
+    this.sortPlaces();
+  }
+
+  private sortPlaces(): void {
+    if (this.sortOrder === 'ASC') {
+      // sort in ascending order (A to Z)
+      this.showedPlaces = this.showedPlaces.sort((p1: Place, p2: Place) => {
+        if (p1.title > p2.title) {
+          return 1;
+        } else if (p1.title === p2.title) {
+          return 0;
+        } else {
+          return -1;;
+        }
+      });
+    } else {
+      // sort in descending order (Z to A)
+      this.showedPlaces = this.showedPlaces.sort((p1: Place, p2: Place) => {
+        if (p1.title > p2.title) {
+          return -1;
+        } else if (p1.title === p2.title) {
+          return 0;
+        } else {
+          return 1;;
+        }
+      });
     }
   }
 
