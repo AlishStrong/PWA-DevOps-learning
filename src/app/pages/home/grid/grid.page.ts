@@ -96,11 +96,13 @@ export class GridPage implements OnInit {
   showTypesTop = false;
   types: Set<string>;
   selectedTypes: string[] = [];
+  showedPlaces: Place[] = [];
 
   constructor(private modalController: ModalController) { }
 
   ngOnInit() {
     this.types = this.getAllTypes(this.places);
+    this.filterPlaces();
   }
 
   getAllTypes(places: Place[]): Set<string> {
@@ -124,6 +126,23 @@ export class GridPage implements OnInit {
       console.log('Add type');
       this.selectedTypes.push(type);
       console.log('After: ', this.selectedTypes);
+    }
+    this.filterPlaces();
+  }
+
+  private filterPlaces(): void {
+    if (this.selectedTypes.length > 0) {
+      this.showedPlaces = this.places.filter(place => {
+        let toShow = false;
+        place.type.forEach(type => {
+          if (this.selectedTypes.includes(type)) {
+            toShow = true;
+          }
+        });
+        return toShow;
+      });
+    } else {
+      this.showedPlaces = this.places;
     }
   }
 
