@@ -39,17 +39,17 @@
       <ion-icon name="caret-up"
                 slot="end"
                 *ngIf="showSort"></ion-icon>
-      <ion-label>Choose type (bottom appearence)</ion-label>
+      <ion-label>Sort places</ion-label>
     </ion-item>
     <p style="margin: 4px 26px 0;"
        *ngIf="showSort">
       <ion-segment (ionChange)="sortOrderChanged($event)"
                    [value]="sortOrder">
         <ion-segment-button value="ASC">
-          <ion-label>A - Z</ion-label>
+          <ion-label>A to Z</ion-label>
         </ion-segment-button>
         <ion-segment-button value="DESC">
-          <ion-label>Z - A</ion-label>
+          <ion-label>Z to A</ion-label>
         </ion-segment-button>
       </ion-segment>
     </p>
