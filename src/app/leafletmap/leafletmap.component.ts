@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-declare var L: any;
+import * as L from 'leaflet';
 @Component({
   selector: 'app-leafletmap',
   template: `
 <div>
-<p>
+<p class="alisheraliev">
 leafletmap works!
 </p>
 <div id="mapid"
@@ -34,8 +34,8 @@ export class LeafletmapComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         console.log('2 sec passes');
         tiles.addTo(mymap);
-      }, 10);
-    }, 10)
+      }, 100);
+    }, 100)
   }
 
 }
