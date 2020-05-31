@@ -21,16 +21,21 @@ export class LeafletmapComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    var mymap = L.map('mapid').setView([60.1918347, 24.8373201], 3);
+    setTimeout(() => {
+      console.log('20 msec passes');
+      var mymap = L.map('mapid').setView([60.1918347, 24.8373201], 13);
 
-    // const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //   maxZoom: 19,
-    //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    // });
+      const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      });
 
-    // console.log(tiles);
-
-    // tiles.addTo(mymap);
+      console.log(tiles);
+      setTimeout(() => {
+        console.log('2 sec passes');
+        tiles.addTo(mymap);
+      }, 10);
+    }, 10)
   }
 
 }
