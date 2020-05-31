@@ -5,19 +5,17 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import * as leaflet from 'leaflet';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LEAFLET_TOKEN } from './leaflet/leaflet.service';
-import { LeafletmapComponent } from './leafletmap/leafletmap.component';
+import { MenuModule } from './menu/menu.module';
 
-// const leaflet: Leaflet =
 @NgModule({
-  declarations: [AppComponent, LeafletmapComponent],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    AppRoutingModule],
+    MenuModule],
   providers: [
     {
       provide: LEAFLET_TOKEN,

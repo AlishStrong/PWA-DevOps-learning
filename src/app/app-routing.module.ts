@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { LeafletmapComponent } from './leafletmap/leafletmap.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LeafletmapComponent
+    loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)
   },
 ];
 
