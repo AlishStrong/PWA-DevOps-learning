@@ -12,14 +12,25 @@ describe('MapPage', () => {
     const testMap: LeafletMap = {
       setView: () => null
     };
+
     const testTiles: LeafletTileLayer = {
       options: {},
       addTo: () => null
-    }
+    };
+
+    const mockMarker: any = {
+      bindPopup: (input?: any) => mockMarker,
+      openPopup: () => mockMarker,
+      addTo: (input?: any) => null
+    };
+
     const mockLeaflet = {
       map: () => testMap,
-      tileLayer: () => testTiles
-    }
+      tileLayer: () => testTiles,
+      icon: () => null,
+      marker: () => mockMarker
+    };
+
     TestBed.configureTestingModule({
       declarations: [MapPage],
       imports: [IonicModule.forRoot()],

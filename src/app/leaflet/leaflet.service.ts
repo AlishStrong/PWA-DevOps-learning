@@ -6,6 +6,7 @@ export let LEAFLET_TOKEN = new InjectionToken<Leaflet>('leaflet');
 export interface Leaflet {
   map(divId: string, options?: LeafletMapOptions | { [key: string]: any }): LeafletMap;
   tileLayer(url: string, options: LeafletTileLayerOptions): LeafletTileLayer;
+  marker(input: any): any;
 }
 
 export interface LeafletMap {
@@ -24,7 +25,8 @@ export interface LeafletTileLayer extends LeafletGridLayer {
 }
 
 export interface LeafletTileLayerOptions extends LeafletGridLayerOptions {
-
+  zoomOffset?: number,
+  id?: string
 }
 
 export interface LeafletGridLayer extends LeafletLayer {
@@ -32,7 +34,7 @@ export interface LeafletGridLayer extends LeafletLayer {
 }
 
 export interface LeafletGridLayerOptions extends LeafletLayerOptions {
-  tilesize?: number,
+  tileSize?: number,
   maxZoom?: number
 }
 
