@@ -9,10 +9,12 @@ import { LeafletMap, LeafletTileLayer, LEAFLET_TOKEN } from 'src/app/leaflet/lea
 export class MapPage implements OnInit {
   map: LeafletMap;
   tiles: LeafletTileLayer;
+  userLocation: Position;
 
   constructor(@Inject(LEAFLET_TOKEN) private leaflet: any) { }
 
   ngOnInit() {
+    this.obtainCurrentLocation();
     // Leaflet requires a timeout to render properly!
     setTimeout(() => {
       const mymap = this.leaflet.map('mapid');
@@ -37,7 +39,31 @@ export class MapPage implements OnInit {
       });
 
       this.leaflet.marker([60.1918347, 24.8373201], { icon: customIcon }).bindPopup("<b>Du är här!</b><br>").openPopup().addTo(mymap);
-    }, 10)
+    }, 100)
+  }
+
+  private obtainCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        this.positionSuccess(),
+        this.positionError()
+      );
+    } else {
+      console.warn('User did not allow location obtainment');
+    }
+  }
+
+  private positionSuccess() {
+    return (position: Position) => {
+      this.userLocation = position;
+      console.log(position);
+    };
+  }
+
+  private positionError() {
+    return (positionError: PositionError) => {
+      console.error(positionError);
+    };
   }
 
 }
