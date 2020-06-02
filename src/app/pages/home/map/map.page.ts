@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { LeafletMap, LeafletTileLayer, LEAFLET_TOKEN } from 'src/app/leaflet/leaflet.service';
 
 const helsinkiLatLong = [60.1699, 24.9384];
@@ -12,7 +13,10 @@ export class MapPage implements OnInit {
   tiles: LeafletTileLayer;
   userLatLong: number[];
 
-  constructor(@Inject(LEAFLET_TOKEN) private leaflet: any) { }
+  constructor(
+    @Inject(LEAFLET_TOKEN) private leaflet: any,
+    public toastController: ToastController
+  ) { }
 
   ngOnInit() {
     this.obtainCurrentLocation();
@@ -27,6 +31,10 @@ export class MapPage implements OnInit {
     } else {
       console.warn('User did not allow location obtainment');
       this.renderLeafletMap();
+      this.prepareToast('Location permission denied. Navigating to default location', 'warning')
+        .then((toast: HTMLIonToastElement) => {
+          toast.present();
+        });
     }
   }
 
@@ -42,6 +50,17 @@ export class MapPage implements OnInit {
     return (positionError: PositionError) => {
       console.error(positionError);
       this.renderLeafletMap();
+      if (positionError.code === 1) {
+        this.prepareToast('Location permission denied. Navigating to default location', 'warning')
+          .then((toast: HTMLIonToastElement) => {
+            toast.present();
+          });
+      } else if (positionError.code === 2) {
+        this.prepareToast('Unable to determine your location', 'danger')
+          .then((toast: HTMLIonToastElement) => {
+            toast.present();
+          });
+      }
     };
   }
 
@@ -78,5 +97,14 @@ export class MapPage implements OnInit {
       popupAnchor: [0.5, -20],
     });
     return this.leaflet.marker(latlong, { icon: customIcon }).bindPopup("<b>Du är här!</b><br>").openPopup();
+  }
+
+  private prepareToast(message: string, color: string): Promise<HTMLIonToastElement> {
+    return this.toastController.create({
+      duration: 2500,
+      position: 'bottom',
+      color,
+      message
+    });
   }
 }
