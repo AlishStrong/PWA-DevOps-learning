@@ -221,5 +221,6 @@ export class GridPage implements OnInit {
 export interface Place {
   title: string,
   img: string,
-  type?: string[]
+  type?: string[],
+  location?: number[]
 }
