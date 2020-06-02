@@ -71,7 +71,8 @@ export class MapPage implements OnInit {
     return (position: Position) => {
       console.log(position);
       this.userLatLong = [position.coords.latitude, position.coords.longitude];
-      this.renderLeafletMap(this.userLatLong);
+      // this.renderLeafletMap(this.userLatLong);
+      this.renderLeafletMap(helsinkiLatLong);
     };
   }
 
@@ -120,26 +121,27 @@ export class MapPage implements OnInit {
   }
 
   private setUserLocationIcon(latlong: number[]): any {
-    const customIcon = this.leaflet.icon({
-      iconUrl: '/svg/location-sharp.svg',
+    const customIcon = this.leaflet.divIcon({
       iconSize: [40, 40],
+      className: 'customDivIcon',
       iconAnchor: [20, 39],
       popupAnchor: [0.5, -20],
+      html: '<ion-icon name="location-sharp" color="success"></ion-icon>'
     });
     return this.leaflet.marker(latlong, { icon: customIcon }).bindPopup("<b>Du är här!</b><br>").openPopup();
   }
 
   private setPlaceLocationIcon(leafletMap: any) {
     this.mapPlaces.forEach(place => {
-      const customIcon = this.leaflet.icon({
-        iconUrl: '/svg/location-sharp.svg',
+      const divIcon = this.leaflet.divIcon({
         iconSize: [40, 40],
+        className: 'customDivIcon',
         iconAnchor: [20, 39],
         popupAnchor: [0.5, -20],
-        className: place.title.toLowerCase().replace(/[^A-Za-z]/g, '')
+        html: '<ion-icon name="location-sharp" color="danger"></ion-icon>'
       });
 
-      this.leaflet.marker(place.location, { icon: customIcon }).bindPopup(`<b>${place.title}</b><br>`).openPopup().addTo(leafletMap);
+      this.leaflet.marker(place.location, { icon: divIcon }).bindPopup(`<b>${place.title}</b><br>`).openPopup().addTo(leafletMap);
     });
   }
 
