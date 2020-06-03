@@ -25,6 +25,7 @@ export class MapPage implements OnInit {
   }
 
   mapTypeToIcon(type: string): string {
+    console.log('type', type);
     switch (type) {
       case 'active':
         return 'pulse';
@@ -131,6 +132,8 @@ export class MapPage implements OnInit {
     return this.leaflet.marker(latlong, { icon: customIcon }).bindPopup("<b>Du är här!</b><br>").openPopup();
   }
 
+  types = ['alisher', 'madina'];
+
   private setPlaceLocationIcon(leafletMap: any) {
     this.mapPlaces.forEach(place => {
       const divIcon = this.leaflet.divIcon({
@@ -141,8 +144,21 @@ export class MapPage implements OnInit {
         html: '<ion-icon name="location-sharp" color="danger"></ion-icon>'
       });
 
-      this.leaflet.marker(place.location, { icon: divIcon }).bindPopup(`<b>${place.title}</b><br>`).openPopup().addTo(leafletMap);
+      // bindPopup(content: String|HTMLElement|Function|Popup, options?: Popup options)
+      this.leaflet.marker(place.location, { icon: divIcon }).bindPopup(this.returnHTMLel(place)).openPopup().addTo(leafletMap);
     });
+  }
+
+  private returnHTMLel(place: Place): string {
+    var toReturn = `<div style="width: 100%"><b>${place.title}</b></div><div style="margin-top: 0; margin-bottom: 0; display: inline-block;">`;
+    place.type.forEach(t => {
+      const iconName = this.mapTypeToIcon(t);
+      toReturn += `
+      <div style="display: inline-block;"><ion-icon style="zoom:2.0" name="${iconName}"></ion-icon></div>
+      `;
+    })
+    toReturn += '</div>';
+    return toReturn;
   }
 
   private prepareToast(message: string, color: string): Promise<HTMLIonToastElement> {
