@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content>
+  <!-- List of Type filters and Sort direction -->
   <ion-list>
     <!-- Choose type -->
     <ion-item button
@@ -44,19 +45,21 @@
     <p style="margin: 4px 26px 0;"
        *ngIf="showSort">
       <ion-segment (ionChange)="sortOrderChanged($event)"
-                   [value]="sortOrder">
-        <ion-segment-button value="ASC">
-          <ion-label>A to Z</ion-label>
+                   [value]="1">
+        <ion-segment-button value="1">
+          <ion-label>A - Z</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="DESC">
-          <ion-label>Z to A</ion-label>
+        <ion-segment-button value="-1">
+          <ion-label>Z - A</ion-label>
         </ion-segment-button>
       </ion-segment>
     </p>
   </ion-list>
+
+  <!-- Grid of places -->
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let place of showedPlaces"
+      <ion-col *ngFor="let place of placesFromPS | async"
                size-xs="12"
                size-sm="6"
                size-md="4">

@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { LeafletMap, LeafletTileLayer, LEAFLET_TOKEN } from 'src/app/leaflet/leaflet.service';
-import { Place } from '../grid/grid.page';
 
 const helsinkiLatLong = [60.1699, 24.9384];
 @Component({
@@ -169,6 +168,13 @@ export class MapPage implements OnInit {
       message
     });
   }
+}
+
+export interface Place {
+  title: string,
+  img: string,
+  type?: string[],
+  location?: number[]
 }
 
 const places: Place[] = [

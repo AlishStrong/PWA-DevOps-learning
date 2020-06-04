@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { PlacesService } from 'src/app/services/places/places.service';
 import { PromotionComponent } from '../promotion/promotion.component';
 
 @Component({
@@ -8,106 +11,25 @@ import { PromotionComponent } from '../promotion/promotion.component';
   styleUrls: ['./grid.page.scss'],
 })
 export class GridPage implements OnInit {
-  places: Place[] = [
-    {
-      title: `Alisher's`,
-      img: 'alishers',
-      type: ['eatery']
-    },
-    {
-      title: `Peppi's`,
-      img: 'peppis',
-      type: ['eatery']
-    },
-    {
-      title: `Paulina and co.`,
-      img: 'paulina_and_co',
-      type: ['eatery']
-    },
-    {
-      title: `Matisserie`,
-      img: 'matisserie',
-      type: ['eatery']
-    },
-    {
-      title: `Lebanon delights`,
-      img: 'lebanon_delights',
-      type: ['eatery']
-    },
-    {
-      title: `Viihdemaa`,
-      img: 'viihdemaa',
-      type: ['active', 'movies', 'games', 'sports']
-    },
-    {
-      title: `Movie nation`,
-      img: 'movie_nation',
-      type: ['movies']
-    },
-    {
-      title: `Sea adventures`,
-      img: 'sea_adventures',
-      type: ['sports', 'games', 'water']
-    },
-    {
-      title: `Sailor's bar`,
-      img: 'sailors_bar',
-      type: ['eatery', 'bar', 'karaoke']
-    },
-    {
-      title: `Seven friends`,
-      img: 'seven_friends',
-      type: ['bar', 'eatery', 'night club']
-    },
-    {
-      title: `Vegicious`,
-      img: 'vegicious',
-      type: ['eatery']
-    },
-    {
-      title: `Body+`,
-      img: 'body_plus',
-      type: ['sports']
-    },
-    {
-      title: `Laser polygon`,
-      img: 'laser_polygon',
-      type: ['sports', 'games']
-    },
-    {
-      title: `Music bar`,
-      img: 'music_bar',
-      type: ['bar', 'eatery', 'karaoke', 'music']
-    },
-    {
-      title: `Karaoke, chill and bar`,
-      img: 'karaoke_chill_and_bar',
-      type: ['bar', 'karaoke', 'night club']
-    },
-    {
-      title: 'Dupligo',
-      img: 'dupligo',
-      type: ['eatery', 'bar', 'music']
-    }
-  ];
-
   modalElement: HTMLIonModalElement;
   showTypes = false;
   showSort = false;
-  sortOrder = 'ASC';
   types: Set<string>;
   selectedTypes: string[] = [];
-  showedPlaces: Place[] = [];
+  placesFromPS: Observable<Place[]>;
 
-  constructor(private modalController: ModalController) { }
+  constructor(private modalController: ModalController, private placeService: PlacesService) { }
 
   ngOnInit() {
-    this.types = this.getAllTypes(this.places);
-    this.filterPlaces();
-  }
-
-  getAllTypes(places: Place[]): Set<string> {
-    return new Set(places.flatMap(p => p.type));
+    console.warn('GridPage.onInit()');
+    this.placesFromPS = this.placeService.getPlaces().pipe(
+      tap(places => {
+        // Make types property non-immutable after initial value assignment
+        if (!this.types) {
+          this.setAllTypes(places);
+        }
+      })
+    );
   }
 
   isSelectedType(type: string): string {
@@ -123,55 +45,11 @@ export class GridPage implements OnInit {
     } else {
       this.selectedTypes.push(type);
     }
-    this.filterPlaces();
+    this.placeService.setSelectedTypesSubject(this.selectedTypes);
   }
 
   sortOrderChanged(event: any): void {
-    this.sortOrder = event.detail.value;
-    this.sortPlaces();
-  }
-
-  private filterPlaces(): void {
-    if (this.selectedTypes.length > 0) {
-      this.showedPlaces = this.places.filter(place => {
-        let toShow = false;
-        place.type.forEach(type => {
-          if (this.selectedTypes.includes(type)) {
-            toShow = true;
-          }
-        });
-        return toShow;
-      });
-    } else {
-      this.showedPlaces = this.places;
-    }
-    this.sortPlaces();
-  }
-
-  private sortPlaces(): void {
-    if (this.sortOrder === 'ASC') {
-      // sort in ascending order (A to Z)
-      this.showedPlaces = this.showedPlaces.sort((p1: Place, p2: Place) => {
-        if (p1.title > p2.title) {
-          return 1;
-        } else if (p1.title === p2.title) {
-          return 0;
-        } else {
-          return -1;;
-        }
-      });
-    } else {
-      // sort in descending order (Z to A)
-      this.showedPlaces = this.showedPlaces.sort((p1: Place, p2: Place) => {
-        if (p1.title > p2.title) {
-          return -1;
-        } else if (p1.title === p2.title) {
-          return 0;
-        } else {
-          return 1;;
-        }
-      });
-    }
+    this.placeService.setSortOrderSubject(event.detail.value);
   }
 
   mapTypeToIcon(type: string): string {
@@ -215,6 +93,10 @@ export class GridPage implements OnInit {
     this.modalElement.onDidDismiss().then(() => {
       console.log('Back in Home Grid');
     });
+  }
+
+  private setAllTypes(places: Place[]): void {
+    this.types = new Set(places.flatMap(p => p.type));
   }
 }
 
