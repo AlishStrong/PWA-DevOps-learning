@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { PlacesService } from 'src/app/services/places/places.service';
+import { Place } from 'src/models';
 import { PromotionComponent } from '../promotion/promotion.component';
 
 @Component({
@@ -98,11 +99,4 @@ export class GridPage implements OnInit {
   private setAllTypes(places: Place[]): void {
     this.types = new Set(places.flatMap(p => p.type));
   }
-}
-
-export interface Place {
-  title: string,
-  img: string,
-  type?: string[],
-  location?: number[]
 }
