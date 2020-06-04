@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Place } from '../grid/grid.page';
+import { Place } from 'src/models';
 
 @Component({
   selector: 'app-promotion',

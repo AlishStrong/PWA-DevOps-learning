@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -15,7 +16,9 @@ import { MenuModule } from './menu/menu.module';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    MenuModule],
+    MenuModule,
+    HttpClientModule
+  ],
   providers: [
     {
       provide: LEAFLET_TOKEN,

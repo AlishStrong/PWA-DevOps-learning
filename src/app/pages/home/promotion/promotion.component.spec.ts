@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-import { Place } from '../grid/grid.page';
+import { Place } from 'src/models';
 import { PromotionComponent } from './promotion.component';
 
 
@@ -10,7 +10,7 @@ const alishers: Place = {
   type: ['eatery']
 }
 
-describe('PromotionComponent', () => {
+xdescribe('PromotionComponent', () => {
   let component: PromotionComponent;
   let fixture: ComponentFixture<PromotionComponent>;
 
