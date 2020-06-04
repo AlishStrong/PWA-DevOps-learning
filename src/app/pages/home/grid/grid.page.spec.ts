@@ -1,15 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-
 import { GridPage } from './grid.page';
 
-describe('GridPage', () => {
+
+xdescribe('GridPage', () => {
   let component: GridPage;
   let fixture: ComponentFixture<GridPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GridPage ],
+      declarations: [GridPage],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

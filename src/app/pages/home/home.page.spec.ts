@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { HomePage } from './home.page';
 
-describe('HomePage', () => {
+xdescribe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
   let debugElement: DebugElement;
