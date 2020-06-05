@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { LeafletMap, LeafletTileLayer, LEAFLET_TOKEN } from 'src/app/leaflet/leaflet.service';
+import { PlacesService } from 'src/app/services/places/places.service';
 import { Place } from 'src/models';
 
 const helsinkiLatLong = [60.1699, 24.9384];
@@ -13,19 +14,59 @@ export class MapPage implements OnInit {
   map: LeafletMap;
   tiles: LeafletTileLayer;
   userLatLong: number[];
-  mapPlaces = places;
+  mapPlaces: Place[];
 
   constructor(
     @Inject(LEAFLET_TOKEN) private leaflet: any,
-    public toastController: ToastController
+    public toastController: ToastController,
+    private placesService: PlacesService
   ) { }
 
   ngOnInit() {
-    this.obtainCurrentLocation();
+    console.log('MapPage.ngOnInit()');
+
+    this.placesService.getPlaces()
+      // .pipe(
+      //   tap((places: Place[]) => {
+      //     // Step 1: get places from PlacesService;
+      //     this.mapPlaces = places;
+      //     // Step 2: obtain location;
+      //     // this.obtainCurrentLocation();
+      //     //For DEV only! Hardcoded location
+      //     this.userLatLong = helsinkiLatLong;
+      //   }),
+      // )
+      .subscribe(
+
+        () => {
+          const mymap = this.leaflet.map('mapid');
+
+          this.leaflet.tileLayer(
+            'https://cdn.digitransit.fi/map/v1/{id}/{z}/{x}/{y}@2x.png',
+            {
+              attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+              maxZoom: 19,
+              tileSize: 512,
+              zoomOffset: -1,
+              id: 'hsl-map'
+            }).addTo(mymap);
+
+          mymap.setView(helsinkiLatLong, 13);
+        }
+      );
+
+    // Step 4: set LeafletMap view to location;
+    // Step 5: set icons for places on LeafletMap;
+  }
+
+  renderLeafletMap() {
+    console.log('inside renderLeafletMap()')
+    return () => {
+
+    };
   }
 
   mapTypeToIcon(type: string): string {
-    console.log('type', type);
     switch (type) {
       case 'active':
         return 'pulse';
@@ -60,7 +101,7 @@ export class MapPage implements OnInit {
       );
     } else {
       console.warn('User did not allow location obtainment');
-      this.renderLeafletMap();
+      // this.renderLeafletMap();
       this.prepareToast('Location permission denied. Navigating to default location', 'warning')
         .then((toast: HTMLIonToastElement) => {
           toast.present();
@@ -72,7 +113,7 @@ export class MapPage implements OnInit {
     return (position: Position) => {
       console.log(position);
       this.userLatLong = [position.coords.latitude, position.coords.longitude];
-      this.renderLeafletMap(this.userLatLong);
+      // this.renderLeafletMap(this.userLatLong);
       // this.renderLeafletMap(helsinkiLatLong);
     };
   }
@@ -80,7 +121,7 @@ export class MapPage implements OnInit {
   private positionError() {
     return (positionError: PositionError) => {
       console.error(positionError);
-      this.renderLeafletMap();
+      // this.renderLeafletMap();
       if (positionError.code === 1) {
         this.prepareToast('Location permission denied. Navigating to default location', 'warning')
           .then((toast: HTMLIonToastElement) => {
@@ -95,31 +136,31 @@ export class MapPage implements OnInit {
     };
   }
 
-  private renderLeafletMap(latlong?: number[]): void {
-    // Leaflet requires a timeout to render properly!
-    setTimeout(() => {
-      const mymap = this.leaflet.map('mapid');
+  // private renderLeafletMap(latlong?: number[]): void {
+  //   // Leaflet requires a timeout to render properly!
+  //   setTimeout(() => {
+  //     const mymap = this.leaflet.map('mapid');
 
-      this.leaflet.tileLayer(
-        'https://cdn.digitransit.fi/map/v1/{id}/{z}/{x}/{y}@2x.png',
-        {
-          attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
-          maxZoom: 19,
-          tileSize: 512,
-          zoomOffset: -1,
-          id: 'hsl-map'
-        }).addTo(mymap);
+  //     this.leaflet.tileLayer(
+  //       'https://cdn.digitransit.fi/map/v1/{id}/{z}/{x}/{y}@2x.png',
+  //       {
+  //         attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+  //         maxZoom: 19,
+  //         tileSize: 512,
+  //         zoomOffset: -1,
+  //         id: 'hsl-map'
+  //       }).addTo(mymap);
 
-      // If user's location was obtained, location icon will be added  
-      if (latlong) {
-        mymap.setView(latlong, 13);
-        this.setUserLocationIcon(latlong).addTo(mymap);
-      } else {
-        mymap.setView(helsinkiLatLong, 13);
-      }
-      this.setPlaceLocationIcon(mymap);
-    }, 100)
-  }
+  //     // If user's location was obtained, location icon will be added  
+  //     if (latlong) {
+  //       mymap.setView(latlong, 13);
+  //       this.setUserLocationIcon(latlong).addTo(mymap);
+  //     } else {
+  //       mymap.setView(helsinkiLatLong, 13);
+  //     }
+  //     this.setPlaceLocationIcon(mymap);
+  //   }, 100)
+  // }
 
   private setUserLocationIcon(latlong: number[]): any {
     const customIcon = this.leaflet.divIcon({
@@ -131,8 +172,6 @@ export class MapPage implements OnInit {
     });
     return this.leaflet.marker(latlong, { icon: customIcon }).bindPopup("<b>Du är här!</b><br>").openPopup();
   }
-
-  types = ['alisher', 'madina'];
 
   private setPlaceLocationIcon(leafletMap: any) {
     this.mapPlaces.forEach(place => {
@@ -170,102 +209,3 @@ export class MapPage implements OnInit {
     });
   }
 }
-
-const places: Place[] = [
-  {
-    title: `Alisher's`,
-    img: 'alishers',
-    type: ['eatery'],
-    location: [60.250825, 25.015528]
-  },
-  {
-    title: `Peppi's`,
-    img: 'peppis',
-    type: ['eatery'],
-    location: [60.230401, 24.884753]
-  },
-  {
-    title: `Paulina and co.`,
-    img: 'paulina_and_co',
-    type: ['eatery'],
-    location: [60.184635, 24.943316]
-  },
-  {
-    title: `Matisserie`,
-    img: 'matisserie',
-    type: ['eatery'],
-    location: [60.164922, 24.928706]
-  },
-  {
-    title: `Lebanon delights`,
-    img: 'lebanon_delights',
-    type: ['eatery'],
-    location: [60.213540, 25.082449]
-  },
-  {
-    title: `Viihdemaa`,
-    img: 'viihdemaa',
-    type: ['active', 'movies', 'games', 'sports'],
-    location: [60.188624, 24.940774]
-  },
-  {
-    title: `Movie nation`,
-    img: 'movie_nation',
-    type: ['movies'],
-    location: [60.187353, 24.977346]
-  },
-  {
-    title: `Sea adventures`,
-    img: 'sea_adventures',
-    type: ['sports', 'games', 'water'],
-    location: [60.146097, 24.988103]
-  },
-  {
-    title: `Sailor's bar`,
-    img: 'sailors_bar',
-    type: ['eatery', 'bar', 'karaoke'],
-    location: [60.155719, 24.930845]
-  },
-  {
-    title: `Seven friends`,
-    img: 'seven_friends',
-    type: ['bar', 'eatery', 'night club'],
-    location: [60.168641, 24.960282]
-  },
-  {
-    title: `Vegicious`,
-    img: 'vegicious',
-    type: ['eatery'],
-    location: [60.173077, 24.928037]
-  },
-  {
-    title: `Body+`,
-    img: 'body_plus',
-    type: ['sports'],
-    location: [60.158558, 24.879491]
-  },
-  {
-    title: `Laser polygon`,
-    img: 'laser_polygon',
-    type: ['sports', 'games'],
-    location: [60.165681, 24.902614]
-  },
-  {
-    title: `Music bar`,
-    img: 'music_bar',
-    type: ['bar', 'eatery', 'karaoke', 'music'],
-    location: [60.183211, 24.919162]
-  },
-  {
-    title: `Karaoke, chill and bar`,
-    img: 'karaoke_chill_and_bar',
-    type: ['bar', 'karaoke', 'night club'],
-    location: [60.191223, 24.959682]
-  },
-  {
-    title: 'Dupligo',
-    img: 'dupligo',
-    type: ['eatery', 'bar', 'music'],
-    location: [60.196987, 24.948177]
-  }
-];
