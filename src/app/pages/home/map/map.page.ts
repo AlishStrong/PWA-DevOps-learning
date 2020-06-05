@@ -15,7 +15,6 @@ const helsinkiLatLong = [60.1699, 24.9384];
 export class MapPage implements OnInit, OnDestroy {
   map: any;
   layer: any;
-  userLatLong: number[];
   mapPlaces: Place[];
 
   placesSubscription: Subscription;
@@ -27,26 +26,6 @@ export class MapPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    console.log('MapPage.ngOnInit()');
-
-    // throwError('I am an error')
-    //   .pipe(
-    //     catchError(error => {
-    //       return of(null);
-    //     })
-    //   )
-    //   .subscribe(
-    //     data => {
-    //       if (data) {
-    //         console.log(data);
-    //       } else {
-    //         console.error(data);
-    //       }
-    //     },
-    //     error => console.error(error),
-    //     () => console.warn('subscription ended!')
-    //   );
-
     this.placesSubscription = this.placesService.getPlaces()
       .pipe(
         tap((places: Place[]) => {
@@ -61,13 +40,11 @@ export class MapPage implements OnInit, OnDestroy {
       )
       .subscribe(
         () => {
-          if (this.mapPlaces) {
-            console.log('mapPlaces', this.mapPlaces);
-          }
-
           // Step 2: render the map
+          // Step 2.1: bind Map to html element of id 'mapid
           this.map = this.leaflet.map('mapid');
 
+          // Step 2.2: define Layer for the map
           this.layer = this.leaflet.tileLayer(
             'https://cdn.digitransit.fi/map/v1/{id}/{z}/{x}/{y}@2x.png',
             {
@@ -78,33 +55,34 @@ export class MapPage implements OnInit, OnDestroy {
               id: 'hsl-map'
             });
 
+          // Step 2.3: add the Layer to the Map  
           this.map.addLayer(this.layer);
 
+          // Step 2.4: locate user's position
           this.map.locate({
             setView: true
           });
 
+          // Step 2.4.1: add location icon on locationfound-event
           this.map.on('locationfound', (locationEvent) => {
-            console.log('LocationEvent', locationEvent);
             this.map.setView(locationEvent.latlng, 13);
+            this.map.addLayer(this.setUserLocationIcon(locationEvent.latlng));
           });
-
+          // Step 2.4.2: set view to Helsinki on locationerror-event
           this.map.on('locationerror', (locationError) => {
             this.map.setView(helsinkiLatLong, 13);
           });
+
+          // Step 2.5: add icons of places
+          if (this.mapPlaces) {
+            this.setPlaceLocationIcon();
+          }
         }
       );
   }
 
   ngOnDestroy() {
     this.placesSubscription.unsubscribe();
-  }
-
-  renderLeafletMap() {
-    console.log('inside renderLeafletMap()')
-    return () => {
-
-    };
   }
 
   mapTypeToIcon(type: string): string {
@@ -134,75 +112,6 @@ export class MapPage implements OnInit, OnDestroy {
     }
   }
 
-  private obtainCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        this.positionSuccess(),
-        this.positionError()
-      );
-    } else {
-      console.warn('User did not allow location obtainment');
-      this.prepareToast('Location permission denied. Navigating to default location', 'warning')
-        .then((toast: HTMLIonToastElement) => {
-          toast.present();
-        });
-      this.userLatLong = helsinkiLatLong;
-    }
-  }
-
-  private positionSuccess() {
-    return (position: Position) => {
-      console.log(position);
-      this.userLatLong = helsinkiLatLong; // TODO remove for pushes
-      // this.userLatLong = [position.coords.latitude, position.coords.longitude];
-      console.log('positionSuccess().userLatLong', this.userLatLong);
-    };
-  }
-
-  private positionError() {
-    return (positionError: PositionError) => {
-      console.error(positionError);
-      if (positionError.code === 1) {
-        this.prepareToast('Location permission denied. Navigating to default location', 'warning')
-          .then((toast: HTMLIonToastElement) => {
-            toast.present();
-          });
-      } else if (positionError.code === 2) {
-        this.prepareToast('Unable to determine your location. Navigating to default location', 'danger')
-          .then((toast: HTMLIonToastElement) => {
-            toast.present();
-          });
-      }
-      this.userLatLong = helsinkiLatLong;
-    };
-  }
-
-  // private renderLeafletMap(latlong?: number[]): void {
-  //   // Leaflet requires a timeout to render properly!
-  //   setTimeout(() => {
-  //     const mymap = this.leaflet.map('mapid');
-
-  //     this.leaflet.tileLayer(
-  //       'https://cdn.digitransit.fi/map/v1/{id}/{z}/{x}/{y}@2x.png',
-  //       {
-  //         attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
-  //         maxZoom: 19,
-  //         tileSize: 512,
-  //         zoomOffset: -1,
-  //         id: 'hsl-map'
-  //       }).addTo(mymap);
-
-  //     // If user's location was obtained, location icon will be added  
-  //     if (latlong) {
-  //       mymap.setView(latlong, 13);
-  //       this.setUserLocationIcon(latlong).addTo(mymap);
-  //     } else {
-  //       mymap.setView(helsinkiLatLong, 13);
-  //     }
-  //     this.setPlaceLocationIcon(mymap);
-  //   }, 100)
-  // }
-
   private setUserLocationIcon(latlong: number[]): any {
     const customIcon = this.leaflet.divIcon({
       iconSize: [40, 40],
@@ -214,7 +123,7 @@ export class MapPage implements OnInit, OnDestroy {
     return this.leaflet.marker(latlong, { icon: customIcon }).bindPopup("<b>Du är här!</b><br>").openPopup();
   }
 
-  private setPlaceLocationIcon(leafletMap: any) {
+  private setPlaceLocationIcon() {
     this.mapPlaces.forEach(place => {
       const divIcon = this.leaflet.divIcon({
         iconSize: [40, 40],
@@ -225,7 +134,7 @@ export class MapPage implements OnInit, OnDestroy {
       });
 
       // bindPopup(content: String|HTMLElement|Function|Popup, options?: Popup options)
-      this.leaflet.marker(place.location, { icon: divIcon }).bindPopup(this.returnHTMLel(place)).openPopup().addTo(leafletMap);
+      this.leaflet.marker(place.location, { icon: divIcon }).bindPopup(this.returnHTMLel(place)).openPopup().addTo(this.map);
     });
   }
 
