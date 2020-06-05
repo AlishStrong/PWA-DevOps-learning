@@ -1,6 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { LeafletMap, LeafletTileLayer, LEAFLET_TOKEN } from 'src/app/leaflet/leaflet.service';
+import { of, Subscription } from 'rxjs';
+import { catchError, delay, tap } from 'rxjs/operators';
+import { LEAFLET_TOKEN } from 'src/app/leaflet/leaflet.service';
 import { PlacesService } from 'src/app/services/places/places.service';
 import { Place } from 'src/models';
 
@@ -10,11 +12,13 @@ const helsinkiLatLong = [60.1699, 24.9384];
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
 })
-export class MapPage implements OnInit {
-  map: LeafletMap;
-  tiles: LeafletTileLayer;
+export class MapPage implements OnInit, OnDestroy {
+  map: any;
+  layer: any;
   userLatLong: number[];
   mapPlaces: Place[];
+
+  placesSubscription: Subscription;
 
   constructor(
     @Inject(LEAFLET_TOKEN) private leaflet: any,
@@ -25,23 +29,46 @@ export class MapPage implements OnInit {
   ngOnInit() {
     console.log('MapPage.ngOnInit()');
 
-    this.placesService.getPlaces()
-      // .pipe(
-      //   tap((places: Place[]) => {
-      //     // Step 1: get places from PlacesService;
-      //     this.mapPlaces = places;
-      //     // Step 2: obtain location;
-      //     // this.obtainCurrentLocation();
-      //     //For DEV only! Hardcoded location
-      //     this.userLatLong = helsinkiLatLong;
-      //   }),
-      // )
+    // throwError('I am an error')
+    //   .pipe(
+    //     catchError(error => {
+    //       return of(null);
+    //     })
+    //   )
+    //   .subscribe(
+    //     data => {
+    //       if (data) {
+    //         console.log(data);
+    //       } else {
+    //         console.error(data);
+    //       }
+    //     },
+    //     error => console.error(error),
+    //     () => console.warn('subscription ended!')
+    //   );
+
+    this.placesSubscription = this.placesService.getPlaces()
+      .pipe(
+        tap((places: Place[]) => {
+          // Step 1: get places
+          this.mapPlaces = places;
+        }),
+        catchError(error => {
+          console.error('Failed to get Places from Places Service', error);
+          return of(null);
+        }),
+        delay(1)
+      )
       .subscribe(
-
         () => {
-          const mymap = this.leaflet.map('mapid');
+          if (this.mapPlaces) {
+            console.log('mapPlaces', this.mapPlaces);
+          }
 
-          this.leaflet.tileLayer(
+          // Step 2: render the map
+          this.map = this.leaflet.map('mapid');
+
+          this.layer = this.leaflet.tileLayer(
             'https://cdn.digitransit.fi/map/v1/{id}/{z}/{x}/{y}@2x.png',
             {
               attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
@@ -49,14 +76,28 @@ export class MapPage implements OnInit {
               tileSize: 512,
               zoomOffset: -1,
               id: 'hsl-map'
-            }).addTo(mymap);
+            });
 
-          mymap.setView(helsinkiLatLong, 13);
+          this.map.addLayer(this.layer);
+
+          this.map.locate({
+            setView: true
+          });
+
+          this.map.on('locationfound', (locationEvent) => {
+            console.log('LocationEvent', locationEvent);
+            this.map.setView(locationEvent.latlng, 13);
+          });
+
+          this.map.on('locationerror', (locationError) => {
+            this.map.setView(helsinkiLatLong, 13);
+          });
         }
       );
+  }
 
-    // Step 4: set LeafletMap view to location;
-    // Step 5: set icons for places on LeafletMap;
+  ngOnDestroy() {
+    this.placesSubscription.unsubscribe();
   }
 
   renderLeafletMap() {
@@ -101,38 +142,38 @@ export class MapPage implements OnInit {
       );
     } else {
       console.warn('User did not allow location obtainment');
-      // this.renderLeafletMap();
       this.prepareToast('Location permission denied. Navigating to default location', 'warning')
         .then((toast: HTMLIonToastElement) => {
           toast.present();
         });
+      this.userLatLong = helsinkiLatLong;
     }
   }
 
   private positionSuccess() {
     return (position: Position) => {
       console.log(position);
-      this.userLatLong = [position.coords.latitude, position.coords.longitude];
-      // this.renderLeafletMap(this.userLatLong);
-      // this.renderLeafletMap(helsinkiLatLong);
+      this.userLatLong = helsinkiLatLong; // TODO remove for pushes
+      // this.userLatLong = [position.coords.latitude, position.coords.longitude];
+      console.log('positionSuccess().userLatLong', this.userLatLong);
     };
   }
 
   private positionError() {
     return (positionError: PositionError) => {
       console.error(positionError);
-      // this.renderLeafletMap();
       if (positionError.code === 1) {
         this.prepareToast('Location permission denied. Navigating to default location', 'warning')
           .then((toast: HTMLIonToastElement) => {
             toast.present();
           });
       } else if (positionError.code === 2) {
-        this.prepareToast('Unable to determine your location', 'danger')
+        this.prepareToast('Unable to determine your location. Navigating to default location', 'danger')
           .then((toast: HTMLIonToastElement) => {
             toast.present();
           });
       }
+      this.userLatLong = helsinkiLatLong;
     };
   }
 
