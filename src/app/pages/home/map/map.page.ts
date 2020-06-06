@@ -48,9 +48,6 @@ export class MapPage implements OnInit, OnDestroy {
           } else {
             console.log('MapPage.onInit().subscription - Map already EXIST');
           }
-
-          console.log('this.placeMarkerMap', this.placeMarkerMap.size);
-
           // Step 3: add/remove Markers of places
           if (this.places) {
             this.updatepPlaceMarkers();
@@ -110,30 +107,19 @@ export class MapPage implements OnInit, OnDestroy {
   }
 
   private updatepPlaceMarkers() {
-    const newPlaces = new Set(this.places);
-    const currentTitles = new Set<string>(this.placeMarkerMap.keys());
-    const titlesRemove = new Set<string>(currentTitles);
-    const titlesAdd = new Set<string>();
-    const titlesKeep = new Set<string>();
+    const titlesRemove = new Set<string>(this.placeMarkerMap.keys());
 
-    for (let place of newPlaces) {
-      if (currentTitles.has(place.title)) {
-        titlesKeep.add(place.title);
+    this.places.forEach(place => {
+      if (titlesRemove.has(place.title)) {
         titlesRemove.delete(place.title);
       } else {
-        titlesAdd.add(place.title);
         this.placeMarkerMap.set(place.title, this.setPlaceMarker(place));
       }
-    }
+    });
 
     for (let toRemove of titlesRemove) {
       this.removePlaceMarker(toRemove);
     }
-
-    console.log('titlesAdd', titlesAdd);
-    console.log('titlesRemove', titlesRemove);
-    console.log('titlesKeep', titlesKeep);
-    console.log('placeMarkerMap', this.placeMarkerMap);
   }
 
   private setPlaceMarker(place: Place): any {
