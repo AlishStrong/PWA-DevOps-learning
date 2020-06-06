@@ -92,6 +92,44 @@ export class MapPage implements OnInit, OnDestroy {
     this.map.on('locationerror', (locationError) => {
       console.log(locationError);
       this.map.setView(helsinkiLatLong, 13);
+      let errorPromise: Promise<HTMLIonToastElement>;
+      switch (locationError.code) {
+        // Geolocation not supported
+        case 0:
+          errorPromise = this.prepareToast(
+            'Your device does not support geolocation! Navigating to default location.',
+            'warning');
+          break;
+
+        // User denied position obtainment
+        case 1:
+          errorPromise = this.prepareToast(
+            'Location permission denied! Navigating to default location.',
+            'warning');
+          break;
+
+        // Position unavailable  
+        case 2:
+          errorPromise = this.prepareToast(
+            'Unable to determine your location! Navigating to default location.',
+            'danger');
+          break;
+
+        // Timeout 
+        case 3:
+          errorPromise = this.prepareToast(
+            'Location determination vailed after the maximum timeout! Navigating to default location.',
+            'danger');
+          break;
+
+        default:
+          errorPromise = this.prepareToast(locationError.message, 'danger');
+          break;
+      }
+      errorPromise.then((toast: HTMLIonToastElement) => {
+        console.error('location error');
+        toast.present();
+      });
     });
   }
 
@@ -179,10 +217,17 @@ export class MapPage implements OnInit, OnDestroy {
 
   private prepareToast(message: string, color: string): Promise<HTMLIonToastElement> {
     return this.toastController.create({
-      duration: 2500,
+      duration: 3000,
       position: 'bottom',
       color,
-      message
+      message,
+      buttons: [
+        {
+          side: 'end',
+          role: 'cancel',
+          icon: 'close-circle-outline'
+        }
+      ]
     });
   }
 }
