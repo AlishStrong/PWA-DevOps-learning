@@ -43,10 +43,7 @@ export class MapPage implements OnInit, OnDestroy {
         () => {
           // Step 2: render the map if it was not rendered yet!
           if (!this.map) {
-            console.log('MapPage.onInit().subscription - rendering Map');
             this.renderMap();
-          } else {
-            console.log('MapPage.onInit().subscription - Map already EXIST');
           }
           // Step 3: add/remove Markers of places
           if (this.places) {
@@ -86,6 +83,7 @@ export class MapPage implements OnInit, OnDestroy {
     // Step 2.4.1: add location icon on locationfound-event
     this.map.on('locationfound', (locationEvent) => {
       this.setUserLocationIcon(locationEvent.latlng);
+      console.log('I am setting view');
       this.map.setView(locationEvent.latlng, 13);
     });
     // Step 2.4.2: set view to Helsinki on locationerror-event
@@ -131,6 +129,10 @@ export class MapPage implements OnInit, OnDestroy {
         toast.present();
       });
     });
+  }
+
+  navigateToUsersLocation() {
+    this.map.locate();
   }
 
   private setUserLocationIcon(latlong: number[]) {

@@ -5,8 +5,18 @@
 </ion-header>
 
 <ion-content>
-  <div id="clockToronto"
-       class="clock leaflet-control">Clock here for Toronto</div>
+  <div class="leaflet-top leaflet-right"
+       *ngIf="map">
+    <div class="leaflet-control">
+      <div class="leaflet-bar">
+        <div (click)="navigateToUsersLocation()"
+             class="custom-control">
+          <ion-icon name="locate"
+                    style="width: 100%; height: 100%;"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
   <div id="mapid"
        style="width: 100%; height: 100%;"></div>
 
