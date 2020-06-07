@@ -5,10 +5,37 @@
 </ion-header>
 
 <ion-content>
+  <ion-fab horizontal="end"
+           *ngIf="map && places"
+           vertical="top"
+           slot="fixed">
+    <ion-fab-button color="danger"
+                    style="border-radius: 50%; box-shadow: 0 1px 5px rgba(0,0,0,0.65);"
+                    size="small">
+      <ion-icon name="funnel"
+                style="margin-top: 4px;"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom">
+      <ion-fab-button color="light">
+        <ion-icon name="logo-facebook"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="light">
+        <ion-icon name="logo-twitter"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="light">
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="light">
+        <ion-icon name="logo-google"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
   <ion-fab horizontal="start"
+           *ngIf="map"
            vertical="bottom"
            slot="fixed">
-    <ion-fab-button color="light"
+    <ion-fab-button color="success"
                     (click)="navigateToUsersLocation()"
                     style="border-radius: 50%; box-shadow: 0 1px 5px rgba(0,0,0,0.65);"
                     size="small">
