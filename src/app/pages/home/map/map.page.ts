@@ -143,6 +143,51 @@ export class MapPage implements OnInit, OnDestroy {
     this.map.locate();
   }
 
+  mapTypeToIcon(type: string): string {
+    switch (type) {
+      case 'active':
+        return 'pulse';
+      case 'eatery':
+        return 'restaurant';
+      case 'bar':
+        return 'beer';
+      case 'sports':
+        return 'trophy';
+      case 'karaoke':
+        return 'mic';
+      case 'water':
+        return 'boat';
+      case 'games':
+        return 'game-controller';
+      case 'night club':
+        return 'wine';
+      case 'movies':
+        return 'videocam';
+      case 'music':
+        return 'musical-notes';
+      default:
+        return '';
+    }
+  }
+
+  onTypePress(event: Event, type: string): void {
+    if (this.selectedTypes.includes(type)) {
+      this.selectedTypes = this.selectedTypes.filter(t => t !== type);
+    } else {
+      this.selectedTypes.push(type);
+    }
+    event.stopPropagation();
+    this.placesService.setSelectedTypesSubject(this.selectedTypes);
+  }
+
+  isSelectedType(type: string): string {
+    if (this.selectedTypes.includes(type)) {
+      return 'primary';
+    } else {
+      return 'light';
+    }
+  }
+
   private setUserLocationIcon(latlong: number[]) {
     const customIcon = this.leaflet.divIcon({
       iconSize: [40, 40],
@@ -196,51 +241,6 @@ export class MapPage implements OnInit, OnDestroy {
     })
     toReturn += '</div>';
     return toReturn;
-  }
-
-  private mapTypeToIcon(type: string): string {
-    switch (type) {
-      case 'active':
-        return 'pulse';
-      case 'eatery':
-        return 'restaurant';
-      case 'bar':
-        return 'beer';
-      case 'sports':
-        return 'trophy';
-      case 'karaoke':
-        return 'mic';
-      case 'water':
-        return 'boat';
-      case 'games':
-        return 'game-controller';
-      case 'night club':
-        return 'wine';
-      case 'movies':
-        return 'videocam';
-      case 'music':
-        return 'musical-notes';
-      default:
-        return '';
-    }
-  }
-
-  onTypePress(event: Event, type: string): void {
-    if (this.selectedTypes.includes(type)) {
-      this.selectedTypes = this.selectedTypes.filter(t => t !== type);
-    } else {
-      this.selectedTypes.push(type);
-    }
-    event.stopPropagation();
-    this.placesService.setSelectedTypesSubject(this.selectedTypes);
-  }
-
-  isSelectedType(type: string): string {
-    if (this.selectedTypes.includes(type)) {
-      return 'primary';
-    } else {
-      return 'light';
-    }
   }
 
   private prepareToast(message: string, color: string): Promise<HTMLIonToastElement> {
