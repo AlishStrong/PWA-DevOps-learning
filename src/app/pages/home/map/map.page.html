@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-fab horizontal="end"
-           *ngIf="map && places"
+           *ngIf="map && types"
            vertical="top"
            slot="fixed">
     <ion-fab-button color="danger"
@@ -16,17 +16,10 @@
                 style="margin-top: 4px;"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="bottom">
-      <ion-fab-button color="light">
-        <ion-icon name="logo-facebook"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="light">
-        <ion-icon name="logo-twitter"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="light">
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="light">
-        <ion-icon name="logo-google"></ion-icon>
+      <ion-fab-button [color]="isSelectedType(type)"
+                      (click)="onTypePress($event, type)"
+                      *ngFor="let type of types">
+        <ion-icon [name]="mapTypeToIcon(type)"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
