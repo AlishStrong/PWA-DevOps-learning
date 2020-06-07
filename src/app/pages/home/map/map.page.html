@@ -5,18 +5,37 @@
 </ion-header>
 
 <ion-content>
-  <div class="leaflet-top leaflet-right"
-       *ngIf="map">
-    <div class="leaflet-control">
-      <div class="leaflet-bar">
-        <div (click)="navigateToUsersLocation()"
-             class="custom-control">
-          <ion-icon name="locate"
-                    style="width: 100%; height: 100%;"></ion-icon>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ion-fab horizontal="end"
+           *ngIf="map && types"
+           vertical="top"
+           slot="fixed">
+    <ion-fab-button color="danger"
+                    style="border-radius: 50%; box-shadow: 0 1px 5px rgba(0,0,0,0.65);"
+                    size="small">
+      <ion-icon name="funnel"
+                style="margin-top: 4px;"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom">
+      <ion-fab-button [color]="isSelectedType(type)"
+                      (click)="onTypePress($event, type)"
+                      *ngFor="let type of types">
+        <ion-icon [name]="mapTypeToIcon(type)"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <ion-fab horizontal="start"
+           *ngIf="map"
+           vertical="bottom"
+           slot="fixed">
+    <ion-fab-button color="success"
+                    (click)="navigateToUsersLocation()"
+                    style="border-radius: 50%; box-shadow: 0 1px 5px rgba(0,0,0,0.65);"
+                    size="small">
+      <ion-icon name="locate"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <div id="mapid"
        style="width: 100%; height: 100%;"></div>
 

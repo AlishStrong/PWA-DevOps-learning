@@ -17,6 +17,8 @@ export class MapPage implements OnInit, OnDestroy {
   tileLayer: any; // should be Leaflet.Layer
   places: Place[];
   placeMarkerMap = new Map<string, any>(); // should be Map<string, Leaflet.Marker>
+  types: Set<string>;
+  selectedTypes: string[] = [];
 
   placesSubscription: Subscription;
 
@@ -32,6 +34,9 @@ export class MapPage implements OnInit, OnDestroy {
         tap((places: Place[]) => {
           // Step 1: get places
           this.places = places;
+          if (!this.types) {
+            this.setAllTypes(places);
+          }
         }),
         catchError(error => {
           console.error('Failed to get Places from Places Service', error);
@@ -55,6 +60,10 @@ export class MapPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.placesSubscription.unsubscribe();
+  }
+
+  private setAllTypes(places: Place[]): void {
+    this.types = new Set(places.flatMap(p => p.type));
   }
 
   private renderMap(): void {
@@ -83,7 +92,6 @@ export class MapPage implements OnInit, OnDestroy {
     // Step 2.4.1: add location icon on locationfound-event
     this.map.on('locationfound', (locationEvent) => {
       this.setUserLocationIcon(locationEvent.latlng);
-      console.log('I am setting view');
       this.map.setView(locationEvent.latlng, 13);
     });
     // Step 2.4.2: set view to Helsinki on locationerror-event
@@ -214,6 +222,24 @@ export class MapPage implements OnInit, OnDestroy {
         return 'musical-notes';
       default:
         return '';
+    }
+  }
+
+  onTypePress(event: Event, type: string): void {
+    if (this.selectedTypes.includes(type)) {
+      this.selectedTypes = this.selectedTypes.filter(t => t !== type);
+    } else {
+      this.selectedTypes.push(type);
+    }
+    event.stopPropagation();
+    this.placesService.setSelectedTypesSubject(this.selectedTypes);
+  }
+
+  isSelectedType(type: string): string {
+    if (this.selectedTypes.includes(type)) {
+      return 'primary';
+    } else {
+      return 'light';
     }
   }
 
