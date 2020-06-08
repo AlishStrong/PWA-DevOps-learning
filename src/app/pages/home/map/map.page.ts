@@ -20,6 +20,8 @@ export class MapPage implements OnInit, OnDestroy {
   types: Set<string>;
   selectedTypes: string[] = [];
 
+  usersLocationMarker: any;
+
   placesSubscription: Subscription;
 
   constructor(
@@ -85,12 +87,13 @@ export class MapPage implements OnInit, OnDestroy {
     this.map.addLayer(this.tileLayer);
 
     // Step 2.4: locate user's position
-    this.map.locate({
-      setView: true
-    });
+    this.map.locate();
 
     // Step 2.4.1: add location icon on locationfound-event
     this.map.on('locationfound', (locationEvent) => {
+      if (this.usersLocationMarker) {
+        this.usersLocationMarker.remove()
+      }
       this.setUserLocationIcon(locationEvent.latlng);
       this.map.setView(locationEvent.latlng, 13);
     });
@@ -196,7 +199,7 @@ export class MapPage implements OnInit, OnDestroy {
       popupAnchor: [0.5, -20],
       html: '<ion-icon name="location-sharp" color="success"></ion-icon>'
     });
-    this.leaflet.marker(latlong, { icon: customIcon }).bindPopup("<b>Du är här!</b><br>").openPopup().addTo(this.map);
+    this.usersLocationMarker = this.leaflet.marker(latlong, { icon: customIcon }).bindPopup("<b>Du är här!</b><br>").openPopup().addTo(this.map);
   }
 
   private updatepPlaceMarkers() {
